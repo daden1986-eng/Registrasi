@@ -119,9 +119,11 @@ export const generateRegistrationPDF = async (formData: FormData, plan: WifiPlan
     
     try {
       const base64Img = await readFileAsDataURL(formData.housePhotoFile);
+      // Dynamic format detection
+      const format = base64Img.startsWith('data:image/png') ? 'PNG' : 'JPEG';
       // Add image: x, y, w, h. 
       // Reduced image size to ensure it fits on one page (80x60)
-      doc.addImage(base64Img, 'JPEG', 20, yPos, 80, 60);
+      doc.addImage(base64Img, format, 20, yPos, 80, 60);
       yPos += 65; // Move past image
     } catch (error) {
       console.error("Error adding image to PDF", error);

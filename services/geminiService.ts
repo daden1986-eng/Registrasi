@@ -12,7 +12,10 @@ export const getPlanRecommendation = async (userDescription: string): Promise<AI
     return null;
   }
 
-  const planDescriptions = WIFI_PLANS.map(p => `${p.id}: ${p.name} (${p.speed}, Rp${p.price}) - Cocok untuk: ${p.recommendedFor}`).join('\n');
+  const planDescriptions = WIFI_PLANS.map(p => {
+    const speedInfo = p.speed ? `, ${p.speed}` : '';
+    return `${p.id}: ${p.name} (Rp${p.price}${speedInfo}) - Cocok untuk: ${p.recommendedFor}`;
+  }).join('\n');
 
   const prompt = `
     Kamu adalah asisten penjualan ISP (Internet Service Provider) yang cerdas.

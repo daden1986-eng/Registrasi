@@ -13,7 +13,7 @@ export const WIFI_PLANS: WifiPlan[] = [
   {
     id: 'hemat',
     name: 'Paket Hemat',
-    speed: '15 Mbps',
+    speed: '',
     price: 165000,
     features: ['Ideal untuk 2-3 perangkat', 'Browsing & Chatting lancar', 'Email & Tugas Sekolah', 'Support 24/7'],
     recommendedFor: 'Pengguna ringan, anak kost, atau penggunaan minimal.',
@@ -22,7 +22,7 @@ export const WIFI_PLANS: WifiPlan[] = [
   {
     id: 'home',
     name: 'Paket Keluarga',
-    speed: '30 Mbps',
+    speed: '',
     price: 200000,
     features: ['Ideal untuk 3-5 perangkat', 'Streaming HD lancar', 'Zoom/Google Meet stabil'],
     recommendedFor: 'Keluarga kecil, bekerja dari rumah (WFH), streaming film.',

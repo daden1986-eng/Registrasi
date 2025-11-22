@@ -3,7 +3,7 @@ import { WIFI_PLANS, INITIAL_FORM_DATA } from './constants';
 import { FormData, FormStep, AIRecommendation } from './types';
 import { PlanCard } from './components/PlanCard';
 import { AIRecommender } from './components/AIRecommender';
-import { CheckCircle2, ChevronRight, ChevronLeft, Wifi, User, CreditCard, UploadCloud, Download, Home } from 'lucide-react';
+import { CheckCircle2, ChevronRight, ChevronLeft, Wifi, User, CreditCard, UploadCloud, Download, Home, Copy, Check } from 'lucide-react';
 import { generateRegistrationPDF } from './utils/pdfGenerator';
 
 const App: React.FC = () => {
@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [aiRec, setAiRec] = useState<AIRecommendation | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registrationId, setRegistrationId] = useState<string>("");
+  const [isCopied, setIsCopied] = useState(false);
   const formTopRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top on step change
@@ -66,6 +67,14 @@ const App: React.FC = () => {
     
     setIsSubmitting(false);
     setStep(FormStep.SUCCESS);
+  };
+
+  const handleCopyId = () => {
+    if (registrationId) {
+      navigator.clipboard.writeText(registrationId);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
   };
 
   const selectedPlan = WIFI_PLANS.find(p => p.id === formData.selectedPlanId);
@@ -397,7 +406,20 @@ const App: React.FC = () => {
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">ID REGISTRASI</p>
                 <div className="flex justify-between items-center">
                   <code className="text-xl font-mono font-bold text-slate-800">{registrationId}</code>
-                  <button className="text-brand-600 text-sm font-semibold hover:underline">Salin</button>
+                  <button 
+                    onClick={handleCopyId}
+                    className="text-brand-600 text-sm font-semibold hover:underline flex items-center gap-1"
+                  >
+                    {isCopied ? (
+                      <>
+                        <Check size={14} /> Disalin
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={14} /> Salin
+                      </>
+                    )}
+                  </button>
                 </div>
              </div>
              
