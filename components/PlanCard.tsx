@@ -1,15 +1,14 @@
 import React from 'react';
 import { WifiPlan } from '../types';
-import { Check, Zap, Wifi } from 'lucide-react';
+import { Check, Wifi } from 'lucide-react';
 
 interface PlanCardProps {
   plan: WifiPlan;
   isSelected: boolean;
   onSelect: (id: string) => void;
-  isRecommended?: boolean;
 }
 
-export const PlanCard: React.FC<PlanCardProps> = ({ plan, isSelected, onSelect, isRecommended }) => {
+export const PlanCard: React.FC<PlanCardProps> = ({ plan, isSelected, onSelect }) => {
   return (
     <div 
       className={`relative flex flex-col p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer h-full
@@ -20,13 +19,6 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, isSelected, onSelect, 
       `}
       onClick={() => onSelect(plan.id)}
     >
-      {isRecommended && (
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-orange-400 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
-          <Zap size={12} fill="currentColor" />
-          REKOMENDASI AI
-        </div>
-      )}
-
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-bold text-slate-800">{plan.name}</h3>
@@ -35,6 +27,13 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, isSelected, onSelect, 
           <Wifi size={24} />
         </div>
       </div>
+
+      {/* Hidden Speed Display */}
+      {plan.speed && (
+        <div className="mb-2 inline-block bg-slate-100 px-2 py-0.5 rounded text-xs font-semibold text-slate-600 hidden">
+          {plan.speed}
+        </div>
+      )}
 
       <div className="mb-6">
         <span className="text-sm text-slate-500">Mulai dari</span>

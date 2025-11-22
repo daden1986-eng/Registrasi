@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { WIFI_PLANS, INITIAL_FORM_DATA } from './constants';
-import { FormData, FormStep, AIRecommendation } from './types';
+import { FormData, FormStep } from './types';
 import { PlanCard } from './components/PlanCard';
-import { AIRecommender } from './components/AIRecommender';
 import { CheckCircle2, ChevronRight, ChevronLeft, Wifi, User, CreditCard, UploadCloud, Download, Home, Copy, Check } from 'lucide-react';
 import { generateRegistrationPDF } from './utils/pdfGenerator';
 
 const App: React.FC = () => {
   const [step, setStep] = useState<FormStep>(FormStep.PLAN_SELECTION);
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
-  const [aiRec, setAiRec] = useState<AIRecommendation | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registrationId, setRegistrationId] = useState<string>("");
   const [isCopied, setIsCopied] = useState(false);
@@ -35,14 +33,6 @@ const App: React.FC = () => {
     if (e.target.files && e.target.files[0]) {
        setFormData(prev => ({ ...prev, housePhotoFile: e.target.files![0] }));
     }
-  };
-
-  const handleAIRecommendation = (rec: AIRecommendation) => {
-    setAiRec(rec);
-    setFormData(prev => ({ ...prev, selectedPlanId: rec.recommendedPlanId }));
-    // Optional: Scroll to plans
-    const plansElement = document.getElementById('plans-grid');
-    if (plansElement) plansElement.scrollIntoView({ behavior: 'smooth' });
   };
 
   const nextStep = () => {
@@ -134,20 +124,6 @@ const App: React.FC = () => {
               <p className="text-slate-500 text-lg max-w-2xl mx-auto">Internet ultra-cepat, stabil, dan tanpa batasan kuota untuk mendukung aktivitas digitalmu.</p>
             </div>
 
-            <AIRecommender onRecommendation={handleAIRecommendation} />
-
-            {aiRec && (
-               <div className="bg-brand-50 border border-brand-200 p-4 rounded-xl mb-8 flex items-start gap-3 animate-pulse-once">
-                  <div className="bg-brand-100 p-2 rounded-full text-brand-600 mt-1">
-                    <User size={20} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-brand-800">Rekomendasi AI untuk Anda</h4>
-                    <p className="text-brand-700 text-sm mt-1">{aiRec.reasoning}</p>
-                  </div>
-               </div>
-            )}
-
             <div id="plans-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {WIFI_PLANS.map(plan => (
                 <PlanCard 
@@ -155,7 +131,6 @@ const App: React.FC = () => {
                   plan={plan}
                   isSelected={formData.selectedPlanId === plan.id}
                   onSelect={handlePlanSelect}
-                  isRecommended={aiRec?.recommendedPlanId === plan.id}
                 />
               ))}
             </div>
