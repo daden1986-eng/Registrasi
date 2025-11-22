@@ -40,3 +40,6 @@ export const INITIAL_FORM_DATA = {
   selectedPlanId: null,
   housePhotoFile: null
 };
+
+// Nomor WhatsApp Admin Damar Global Network
+export const ADMIN_WA_NUMBER = '6285180582404';

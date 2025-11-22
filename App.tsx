@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { WIFI_PLANS, INITIAL_FORM_DATA } from './constants';
+import { WIFI_PLANS, INITIAL_FORM_DATA, ADMIN_WA_NUMBER } from './constants';
 import { FormData, FormStep } from './types';
 import { PlanCard } from './components/PlanCard';
-import { CheckCircle2, ChevronRight, ChevronLeft, Wifi, User, CreditCard, UploadCloud, Download, Home, Copy, Check } from 'lucide-react';
+import { CheckCircle2, ChevronRight, ChevronLeft, Wifi, User, CreditCard, UploadCloud, Download, Home, Copy, Check, MessageCircle } from 'lucide-react';
 import { generateRegistrationPDF } from './utils/pdfGenerator';
 
 const App: React.FC = () => {
@@ -68,6 +68,26 @@ const App: React.FC = () => {
   };
 
   const selectedPlan = WIFI_PLANS.find(p => p.id === formData.selectedPlanId);
+
+  const handleSendToWhatsapp = () => {
+    if (!selectedPlan) return;
+
+    const message = `Halo Admin Damar Global Network,
+Saya ingin melakukan pendaftaran internet baru.
+
+*ID Registrasi:* ${registrationId}
+*Nama:* ${formData.fullName}
+*NIK:* ${formData.nik}
+*Paket:* ${selectedPlan.name}
+*Harga:* Rp ${selectedPlan.price.toLocaleString('id-ID')}
+*Alamat:* ${formData.address}
+*Jadwal:* ${formData.installationDate || 'Menyesuaikan'}
+
+Mohon informasinya untuk proses selanjutnya. Terima kasih.`;
+
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${ADMIN_WA_NUMBER}?text=${encodedMessage}`, '_blank');
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
@@ -374,10 +394,10 @@ const App: React.FC = () => {
              </div>
              <h2 className="text-3xl font-bold text-slate-900 mb-4">Pendaftaran Berhasil!</h2>
              <p className="text-slate-600 mb-8 leading-relaxed">
-               Terima kasih <strong>{formData.fullName}</strong>. Tim kami telah menerima data pendaftaran Anda. 
-               Kami akan menghubungi Anda melalui WhatsApp di <strong>{formData.phone}</strong> dalam waktu 1x24 jam untuk konfirmasi jadwal instalasi.
+               Terima kasih <strong>{formData.fullName}</strong>. Data pendaftaran Anda telah tersimpan. 
+               Silakan kirim detail pendaftaran ke Admin via WhatsApp dan unduh bukti pendaftaran.
              </p>
-             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm inline-block text-left w-full">
+             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm inline-block text-left w-full mb-6">
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">ID REGISTRASI</p>
                 <div className="flex justify-between items-center">
                   <code className="text-xl font-mono font-bold text-slate-800">{registrationId}</code>
@@ -398,10 +418,18 @@ const App: React.FC = () => {
                 </div>
              </div>
              
-             <div className="mt-8 space-y-3">
+             <div className="mt-6 space-y-3">
+               <button 
+                  onClick={handleSendToWhatsapp}
+                  className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl shadow-md shadow-green-200 transition-colors flex items-center justify-center gap-2"
+               >
+                 <MessageCircle size={20} />
+                 Kirim Data ke WhatsApp Admin
+               </button>
+
                <button 
                   onClick={() => selectedPlan && generateRegistrationPDF(formData, selectedPlan, registrationId)}
-                  className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl shadow-md shadow-brand-200 transition-colors flex items-center justify-center gap-2"
                >
                  <Download size={20} />
                  Cetak Bukti Pendaftaran (PDF)
