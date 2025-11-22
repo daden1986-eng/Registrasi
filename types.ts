@@ -25,8 +25,3 @@ export enum FormStep {
   CONFIRMATION = 2,
   SUCCESS = 3,
 }
-
-export interface AIRecommendation {
-  recommendedPlanId: string;
-  reasoning: string;
-}
